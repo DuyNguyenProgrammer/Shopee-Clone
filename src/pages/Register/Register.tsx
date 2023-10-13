@@ -1,95 +1,84 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Link } from 'react-router-dom'
-import { getRules } from 'src/utils/rules'
+import Input from 'src/components/Input'
+import { schema, Schema } from 'src/utils/rules'
 
-interface FormData {
-  email: string
-  password: string
-  confirm_password: string
-}
+type FormData = Schema
 
 export default function Register() {
   const {
     register,
     handleSubmit,
+    watch,
     getValues,
     formState: { errors }
-  } = useForm<FormData>()
-
-  const rules = getRules(getValues)
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
+  } = useForm<FormData>({
+    resolver: yupResolver(schema)
   })
+
+  const onSubmit = handleSubmit(
+    (data) => {
+      console.log(data)
+    },
+    (data) => {
+      const password = getValues('password')
+
+      console.log(password)
+    }
+  )
+
+  const value = watch()
+  console.log(value)
 
   return (
     <div className='bg-orange'>
-      <div className='px-4 mx-auto max-w-7xl'>
-        <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
-          <div className='lg:col-span-2 lg:col-start-4'>
-            <form className='p-10 bg-white rounded shadow-sm' onSubmit={onSubmit} noValidate>
-              <div className='text-2xl'>Đăng Ký</div>
-              <div className='mt-8'>
-                {/* <input
+      <div className='container'>
+        <div className='px-4 mx-auto max-w-7xl'>
+          <div className='grid grid-cols-1 py-12 lg:grid-cols-5 lg:py-32 lg:pr-10'>
+            <div className='lg:col-span-2 lg:col-start-4'>
+              <form className='p-10 bg-white rounded shadow-sm' onSubmit={onSubmit} noValidate>
+                <div className='text-2xl'>Đăng Ký</div>
+                <Input
+                  name='email'
+                  register={register}
                   type='email'
-                  className='w-full p-3 border border-gray-300 rounded-sm outline-none focus:border-gray-500 focus:shadow-sm'
+                  className='mt-8'
+                  errorMessage={errors.email?.message}
                   placeholder='Email'
-                  {...(register('email'),
-                  {
-                    required: {
-                      value: true,
-                      message: 'Email là bắt buộc'
-                    },
-                    pattern: {
-                      value: /^\S+@\S+\.\S+$/,
-                      message: 'Email không đúng định dạng'
-                    }
-                  })}
-                /> */}
-                <input
-                  type='email'
-                  className='w-full p-3 border border-gray-300 rounded-sm outline-none focus:border-gray-500 focus:shadow-sm'
-                  placeholder='Email'
-                  {...register('email', rules.email)}
                 />
-
-                <div className='mt-1 text-red-600 min-h-[1rem] text-sm'>{errors.email?.message}</div>
-              </div>
-              <div className='mt-2'>
-                <input
+                <Input
+                  name='password'
+                  register={register}
                   type='password'
-                  className='w-full p-3 border border-gray-300 rounded-sm outline-none focus:border-gray-500 focus:shadow-sm'
+                  className='mt-2'
+                  errorMessage={errors.password?.message}
                   placeholder='Password'
                   autoComplete='on'
-                  {...register('password', rules.password)}
                 />
-                <div className='mt-1 text-red-600 min-h-[1rem] text-sm'>{errors.password?.message}</div>
-
-                <div className='mt-3'>
-                  <input
-                    type='password'
-                    className='w-full p-3 border border-gray-300 rounded-sm outline-none focus:border-gray-500 focus:shadow-sm'
-                    placeholder='Confirm password'
-                    autoComplete='on'
-                    {...register('confirm_password', {
-                      ...rules.confirm_password
-                    })}
-                  />
-                  <div className='mt-1 text-red-600 min-h-[1rem] text-sm'>{errors.confirm_password?.message}</div>
-                </div>
+                <Input
+                  name='confirm_password'
+                  register={register}
+                  type='password'
+                  className='mt-2'
+                  errorMessage={errors.confirm_password?.message}
+                  placeholder='Confirm password'
+                  autoComplete='on'
+                />
                 <div className='mt-2'>
                   <button className='w-full px-2 py-4 text-sm text-center text-white uppercase bg-red-500 hover:bg-red-600'>
                     Đăng ký
                   </button>
                 </div>
-
                 <div className='flex items-center justify-center mt-8'>
                   <span className='text-gray-300'>Bạn đã có tài khoản?</span>
                   <Link className='ml-1 text-red-400' to='/login'>
                     Đăng nhập
                   </Link>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
