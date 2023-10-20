@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { FloatingPortal, useFloating, arrow, shift, offset } from '@floating-ui/react'
+import { FloatingPortal, useFloating, arrow, shift, offset, type Placement } from '@floating-ui/react'
 import { ElementType, useId, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -10,9 +10,17 @@ interface Props {
   className?: string
   as?: ElementType
   initialOpen?: boolean
+  placement?: Placement
 }
 
-export default function Popover({ children, className, renderPopover, as: Element = 'div', initialOpen }: Props) {
+export default function Popover({
+  children,
+  className,
+  renderPopover,
+  as: Element = 'div',
+  initialOpen,
+  placement = 'bottom-end'
+}: Props) {
   const [isOpen, setIsOpen] = useState(initialOpen || false)
   const arrowRef = useRef(null)
 
@@ -23,7 +31,8 @@ export default function Popover({ children, className, renderPopover, as: Elemen
       arrow({
         element: arrowRef
       })
-    ]
+    ],
+    placement: placement
   })
 
   const id = useId()
