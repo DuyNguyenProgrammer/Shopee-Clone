@@ -1,40 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Link } from 'react-router-dom'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { FloatingPortal, useFloating, arrow, shift, offset } from '@floating-ui/react'
-import { useRef, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import Popover from '../Popover'
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
-  const arrowRef = useRef(null)
-
-  const { refs, floatingStyles } = useFloating({
-    middleware: [
-      offset(5),
-      shift(),
-      arrow({
-        element: arrowRef
-      })
-    ]
-  })
-
-  const showPopover = () => {
-    setIsOpen(true)
-  }
-  const hidePopover = () => {
-    setIsOpen(false)
-  }
-
   return (
     <div className='pt-2 pb-5 bg-[linear-gradient(-180deg,#f53d2d,#f63);] text-white'>
       <div className='container'>
         <div className='flex justify-end'>
-          <div
-            className='flex items-center py-1 hover:text-gray-300'
-            ref={refs.setReference}
-            onMouseEnter={showPopover}
-            onMouseLeave={hidePopover}
+          <Popover
+            className='flex items-center py-1 cursor-pointer hover:text-gray-300'
+            renderPopover={
+              <div className='relative bg-white border border-gray-200 rounded-sm shadow-md'>
+                <div className='flex flex-col px-3 py-2 pl-3 pr-28'>
+                  <button className='px-3 py-2 hover:text-orange'>Tiếng Việt</button>
+                  <button className='px-3 py-2 mt-2 hover:text-orange'>English</button>
+                </div>
+              </div>
+            }
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -61,34 +42,29 @@ export default function Header() {
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
-            <FloatingPortal>
-              <AnimatePresence>
-                {isOpen && (
-                  <motion.div
-                    ref={refs.setFloating}
-                    style={floatingStyles}
-                    // initial={{ opacity: 0, transform: 'scale(0)' }}
-                    // animate={{ opacity: 1, transform: 'scale(1)' }}
-                    // exit={{ opacity: 0, transform: 'scale(0)' }}
-                    // transition={{ duration: 0.2 }}
-                  >
-                    <span
-                      ref={arrowRef}
-                      className='border-x-transparent border-t-transparent border-b-white border-[11px] absolute translate-y-[-95%] z-10 ml-[60px]'
-                    ></span>
-                    <div className='relative bg-white border border-gray-200 rounded-sm shadow-md w-[150px]'>
-                      <div className='flex flex-col px-3 py-2'>
-                        <button className='px-3 py-2 hover:text-orange'>Tiếng Việt</button>
-                        <button className='px-3 py-2 mt-2 hover:text-orange'>English</button>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </FloatingPortal>
-          </div>
-
-          <div className='flex items-center py-1 ml-6 cursor-pointer hover:text-gray-300'>
+          </Popover>
+          <Popover
+            className='flex items-center py-1 ml-6 cursor-pointer hover:text-gray-300'
+            renderPopover={
+              <div className='relative bg-white border border-gray-200 rounded-sm shadow-md'>
+                <Link
+                  to='/'
+                  className='block w-full px-4 py-3 text-left bg-white hover:bg-slate-100 hover:text-cyan-500'
+                >
+                  Tài khoản của tôi
+                </Link>
+                <Link
+                  to='/'
+                  className='block w-full px-4 py-3 text-left bg-white hover:bg-slate-100 hover:text-cyan-500'
+                >
+                  Đơn mua
+                </Link>
+                <button className='block w-full px-4 py-3 text-left bg-white hover:bg-slate-100 hover:text-cyan-500'>
+                  Đăng xuất
+                </button>
+              </div>
+            }
+          >
             <div className='flex-shrink-0 w-6 h-6 mr-2'>
               <img
                 src='https://down-vn.img.susercontent.com/file/b139b4df169eb682ce5e39bf1a434847_tn'
@@ -97,7 +73,7 @@ export default function Header() {
               />
             </div>
             <div>nbduy</div>
-          </div>
+          </Popover>
         </div>
         <div className='grid items-end grid-cols-12 gap-4 mt-4'>
           <Link to='/' className='col-span-2'>
